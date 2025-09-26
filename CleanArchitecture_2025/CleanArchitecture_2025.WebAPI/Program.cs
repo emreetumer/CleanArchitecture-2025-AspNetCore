@@ -1,5 +1,6 @@
 using CleanArchitecture_2025.Application;
 using CleanArchitecture_2025.Infrastructure;
+using CleanArchitecture_2025.WebAPI;
 using CleanArchitecture_2025.WebAPI.Controllers;
 using CleanArchitecture_2025.WebAPI.Modules;
 using Microsoft.AspNetCore.OData;
@@ -34,6 +35,8 @@ x.AddFixedWindowLimiter("fixed", cfg =>
     cfg.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
 }));
 
+builder.Services.AddExceptionHandler<ExceptionHandler>().AddProblemDetails();
+
 
 var app = builder.Build();
 
@@ -50,6 +53,8 @@ app.UseCors(x => x
 .SetIsOriginAllowed(t => true));
 
 app.RegisterRoute();
+
+app.UseExceptionHandler();
 
 app.MapControllers().RequireRateLimiting("fixed");
 
