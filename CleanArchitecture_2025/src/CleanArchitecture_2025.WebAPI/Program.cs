@@ -10,6 +10,11 @@ using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddResponseCompression(opt =>
+{
+    opt.EnableForHttps = true;
+});
+
 builder.AddServiceDefaults();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -46,6 +51,8 @@ app.MapScalarApiReference();
 
 app.MapDefaultEndpoints();
 
+app.UseHttpsRedirection();
+
 app.UseCors(x => x
 .AllowAnyHeader()
 .AllowCredentials()
@@ -56,6 +63,8 @@ app.RegisterRoute();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseResponseCompression();
 
 app.UseExceptionHandler();
 
