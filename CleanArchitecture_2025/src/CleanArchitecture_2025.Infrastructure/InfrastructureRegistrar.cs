@@ -1,6 +1,8 @@
 ﻿using CleanArchitecture_2025.Domain.Users;
 using CleanArchitecture_2025.Infrastructure.Context;
+using CleanArchitecture_2025.Infrastructure.Options;
 using GenericRepository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +36,16 @@ public static class InfrastructureRegistrar
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
+        services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
+        services.ConfigureOptions<JwtOptionsSetup>();
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer();
+        services.AddAuthorization();
 
         // services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         // Bunun yerine scrutor kütüphanesini kullanabiliriz.

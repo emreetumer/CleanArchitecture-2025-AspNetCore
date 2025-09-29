@@ -1,4 +1,5 @@
-﻿using CleanArchitecture_2025.Domain.Users;
+﻿using CleanArchitecture_2025.Application.Services;
+using CleanArchitecture_2025.Domain.Users;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -18,10 +19,12 @@ internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, Result
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
-    public LoginCommandHandler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+    private readonly IJwtProvider _jwtProvider;
+    public LoginCommandHandler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IJwtProvider jwtProvider)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _jwtProvider = jwtProvider;
     }
     public async Task<Result<LoginCommandResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
@@ -57,10 +60,11 @@ internal sealed class LoginCommandHandler : IRequestHandler<LoginCommand, Result
         }
 
         // token üret
+        var token = await _jwtProvider.CreateTokenAsync(user, cancellationToken);
 
         var response = new LoginCommandResponse()
         {
-            AccessToken = ""
+            AccessToken = token
         };
 
         return response;
