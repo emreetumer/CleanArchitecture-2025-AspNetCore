@@ -6,29 +6,40 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CleanArchitecture_2025.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class mg2 : Migration
+    public partial class mg1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "CreateUserId",
-                table: "Employees",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "DeleteUserId",
-                table: "Employees",
-                type: "nvarchar(max)",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "UpdateUserId",
-                table: "Employees",
-                type: "nvarchar(max)",
-                nullable: true);
+            migrationBuilder.CreateTable(
+                name: "Employees",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BirthOfDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    Salary = table.Column<decimal>(type: "money", nullable: false),
+                    TCNO = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Town = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FullAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreateAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreateUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdateAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    UpdateUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleteAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    DeleteUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Roles",
@@ -52,12 +63,12 @@ namespace CleanArchitecture_2025.Infrastructure.Migrations
                     FirstName = table.Column<string>(type: "varchar(50)", nullable: false),
                     LastName = table.Column<string>(type: "varchar(50)", nullable: false),
                     CreateAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreateUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UpdateAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    UpdateUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdateUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleteAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    DeleteUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeleteUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserName = table.Column<string>(type: "varchar(15)", nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(MAX)", nullable: true),
@@ -90,22 +101,13 @@ namespace CleanArchitecture_2025.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Employees");
+
+            migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropColumn(
-                name: "CreateUserId",
-                table: "Employees");
-
-            migrationBuilder.DropColumn(
-                name: "DeleteUserId",
-                table: "Employees");
-
-            migrationBuilder.DropColumn(
-                name: "UpdateUserId",
-                table: "Employees");
         }
     }
 }

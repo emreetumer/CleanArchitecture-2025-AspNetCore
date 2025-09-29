@@ -58,4 +58,6 @@ app.UseExceptionHandler();
 
 app.MapControllers().RequireRateLimiting("fixed");
 
+ExtensionsMiddleware.CreateFirstUser(app);
+
 app.Run();
