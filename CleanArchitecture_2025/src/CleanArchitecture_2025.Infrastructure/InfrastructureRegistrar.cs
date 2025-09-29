@@ -1,5 +1,7 @@
-﻿using CleanArchitecture_2025.Infrastructure.Context;
+﻿using CleanArchitecture_2025.Domain.Users;
+using CleanArchitecture_2025.Infrastructure.Context;
 using GenericRepository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +19,11 @@ public static class InfrastructureRegistrar
         });
 
         services.AddScoped<IUnitOfWork>(srv => srv.GetRequiredService<ApplicationDbContext>());
+
+        services // Bu kod user manager kullanabilmek için yazılıyor. User Manager classının DI'sı.
+            .AddIdentity<AppUser, IdentityRole<Guid>>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
         // services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         // Bunun yerine scrutor kütüphanesini kullanabiliriz.
