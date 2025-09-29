@@ -1,11 +1,15 @@
-﻿namespace CleanArchitecture_2025.Domain.Abstractions;
-public abstract class Entity
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace CleanArchitecture_2025.Domain.Users;
+public sealed class AppUser : IdentityUser<Guid>
 {
-    public Entity()
+    public AppUser()
     {
         Id = Guid.CreateVersion7();
     }
-    public Guid Id { get; set; }
+    public string FirstName { get; set; } = default!;
+    public string LastName { get; set; } = default!;
+    public string FullName => $"{FirstName} {LastName}"; //computed property
 
     #region Audit Log
     public DateTimeOffset CreateAt { get; set; }
