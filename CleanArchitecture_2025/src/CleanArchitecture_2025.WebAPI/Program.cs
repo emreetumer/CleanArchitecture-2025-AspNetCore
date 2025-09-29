@@ -54,9 +54,12 @@ app.UseCors(x => x
 
 app.RegisterRoute();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseExceptionHandler();
 
-app.MapControllers().RequireRateLimiting("fixed");
+app.MapControllers().RequireRateLimiting("fixed").RequireAuthorization(); //RequireAuthorization tüm controllerda Bearer kontrolü yapmamýzý saðlar.
 
 ExtensionsMiddleware.CreateFirstUser(app);
 
